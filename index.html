@@ -3,89 +3,429 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Job Calculator</title>
+  <title>Advanced Plumbing Calculator</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/679/679922.png" type="image/png">
   <style>
+    :root {
+      --primary: #0056b3;
+      --secondary: #28a745;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #28a745;
+      --warning: #ffc107;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 1rem;
-      background: #f2f2f7;
-      max-width: 900px;
+      background: linear-gradient(135deg, #f2f2f7 0%, #e6f7ff 100%);
+      max-width: 1000px;
       margin: auto;
       color: #333;
+      min-height: 100vh;
+      line-height: 1.6;
     }
-    h1, h2, h3 {
+    
+    header {
       text-align: center;
-      color: #222;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--primary);
     }
+    
+    h1 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    h2 {
+      color: var(--dark);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    h3 {
+      color: var(--dark);
+      margin: 0.5rem 0;
+    }
+    
     .btn {
-      padding: 0.5rem 1rem;
-      background: #28a745;
+      padding: 0.6rem 1.2rem;
+      background: var(--primary);
       color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 0.95rem;
     }
+    
     .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .btn.btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn.btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .btn.btn-success {
+      background: var(--secondary);
+    }
+    
+    .btn.btn-success:hover {
       background: #218838;
     }
-    .section { display: none; margin-top: 2rem; }
-    .active { display: block; }
-    .item {
-      padding: 0.5rem;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 0.25rem;
-      flex: 1 1 45%;
-      text-align: center;
+    
+    .btn.btn-danger {
+      background: var(--danger);
     }
-    .category-buttons, .item-list, .cart-controls, .nav-buttons {
+    
+    .btn.btn-danger:hover {
+      background: #c82333;
+    }
+    
+    .btn.btn-warning {
+      background: var(--warning);
+      color: var(--dark);
+    }
+    
+    .btn.btn-warning:hover {
+      background: #e0a800;
+    }
+    
+    .section { 
+      display: none; 
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    
+    .active { display: block; }
+    
+    .nav-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.8rem;
       justify-content: center;
-      margin: 1rem 0;
+      margin: 1.5rem 0;
     }
+    
+    .category-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    
+    .item-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    
+    .cart-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    
+    .item {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      flex: 1 1 200px;
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-color: var(--primary);
+    }
+    
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .item-price {
+      color: var(--success);
+      font-weight: 600;
+    }
+    
     #notification {
       text-align: center;
-      color: green;
+      color: #155724;
       margin-top: 0.5rem;
-      display: none;
-    }
-    input[type="time"], input[type="number"], input[type="text"] {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
+      padding: 0.8rem;
       border-radius: 4px;
+      display: none;
+      font-weight: 500;
+      background: #d4edda;
     }
+    
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+    
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      justify-content: center;
+    }
+    
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #495057;
+    }
+    
+    input[type="time"], 
+    input[type="number"], 
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      padding: 0.8rem;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+    }
+    
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+    
     th, td {
-      border: 1px solid #ccc;
-      padding: 0.5rem;
+      border: 1px solid #dee2e6;
+      padding: 0.8rem;
       text-align: center;
     }
-    .input-row {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
+    
+    th {
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
     }
+    
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    
     .edit-qty {
-      width: 50px;
+      width: 60px;
+      padding: 0.5rem;
+      text-align: center;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+    
+    .summary-card {
+      background: #e6f7ff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .summary-total {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--success);
+      text-align: center;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .highlight {
+      background-color: #fff3cd;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: 2rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+    
+    .job-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .job-title {
+      flex: 1 1 300px;
+    }
+    
+    .job-customer {
+      flex: 1 1 300px;
+    }
+    
+    .notes-section {
+      margin-top: 1.5rem;
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .print-only {
+      display: none;
+    }
+    
+    @media print {
+      .no-print {
+        display: none;
+      }
+      
+      .print-only {
+        display: block;
+      }
+      
+      body {
+        background: white;
+        padding: 0.5in;
+        max-width: 100%;
+      }
+      
+      .section {
+        display: block !important;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        page-break-inside: avoid;
+      }
+      
+      .summary-card {
+        border: 2px solid var(--primary);
+        margin: 1rem 0;
+      }
+      
+      .btn {
+        display: none;
+      }
+    }
+    
+    .icon {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    
+    .badge-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .badge-success {
+      background-color: var(--success);
+      color: white;
+    }
+    
+    .badge-warning {
+      background-color: var(--warning);
+      color: var(--dark);
     }
   </style>
 </head>
 <body>
-  <h1>🪠 Job Cost Calculator</h1>
-  <div class="nav-buttons">
+  <header>
+    <h1>
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M20 8h-3V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v10h20V10c0-1.1-.9-2-2-2zM9 6h6v2H9V6zm11 12H4v-3h2v1h2v-1h8v1h2v-1h2v3zm-2-5v-1h-2v1H8v-1H6v1H4v-3h16v3h-2z"/>
+      </svg>
+      Plumbing Job Cost Calculator
+    </h1>
+    <p>Professional tool for calculating plumbing job costs</p>
+  </header>
+  
+  <div class="job-header">
+    <div class="job-title">
+      <label for="jobTitle">Job Title/Description:</label>
+      <input type="text" id="jobTitle" placeholder="e.g., Main Bathroom Remodel">
+    </div>
+    <div class="job-customer">
+      <label for="customerInfo">Customer Information:</label>
+      <input type="text" id="customerInfo" placeholder="Customer name and contact">
+    </div>
+  </div>
+
+  <div class="nav-buttons no-print">
     <button class="btn" onclick="showSection('materials')">Materials</button>
     <button class="btn" onclick="showSection('labor')">Labor</button>
     <button class="btn" onclick="showSection('summary')">Summary</button>
@@ -93,75 +433,207 @@
 
   <!-- MATERIALS SECTION -->
   <div id="materials" class="section active">
-    <h2>Materials</h2>
+    <div class="section-header">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1zm-4.44-6.19l-2.35 3.02-1.56-1.88c-.2-.25-.58-.24-.78.01l-1.74 2.23c-.26.33-.02.81.39.81h8.98c.41 0 .65-.47.4-.8l-2.55-3.39c-.19-.26-.59-.26-.79 0z"/>
+      </svg>
+      <h2>Materials</h2>
+    </div>
+    
     <div class="category-buttons">
       <button class="btn" onclick="showCategory('toilet')">Toilet Supplies</button>
       <button class="btn" onclick="showCategory('cpvc')">CPVC Material</button>
       <button class="btn" onclick="showCategory('valves')">Valves</button>
+      <button class="btn" onclick="showCategory('dwv')">DWV Fittings</button>
     </div>
+    
+    <div id="cpvcSubcategories" style="display: none; margin-bottom: 1.5rem; text-align: center;">
+      <h3>Select CPVC Size</h3>
+      <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
+        <button class="btn btn-secondary" onclick="showCPVCCategory('cpvc_1_2')">1/2" CPVC</button>
+        <button class="btn btn-secondary" onclick="showCPVCCategory('cpvc_3_4')">3/4" CPVC</button>
+      </div>
+    </div>
+    
     <div id="itemList" class="item-list"></div>
-    <details>
-      <summary class="btn">➕ Add New Item</summary>
-      <div class="input-row">
-        <input type="text" id="newItemName" placeholder="New Item Name" />
-        <input type="number" id="newItemPrice" placeholder="Price" min="0" step="0.01" />
-        <button class="btn" onclick="addNewItem()">Add to Category</button>
+    
+    <details style="margin: 1.5rem 0;">
+      <summary class="btn" style="width: 100%;">➕ Add New Item</summary>
+      <div class="input-row" style="margin-top: 1rem;">
+        <input type="text" id="newItemName" placeholder="New Item Name" style="flex: 1; max-width: 300px;" />
+        <input type="number" id="newItemPrice" placeholder="Price" min="0" step="0.01" style="flex: 1; max-width: 150px;" />
+        <button class="btn btn-success" onclick="addNewItem()">Add to Category</button>
       </div>
     </details>
-    <div class="input-row">
-      <input type="number" id="quantityInput" placeholder="Qty" min="1" value="1" />
-    </div>
+    
     <div class="cart-controls">
       <button class="btn" onclick="renderCart()">View Cart</button>
-      <button class="btn" onclick="clearCart()">Reset Cart</button>
+      <button class="btn btn-danger" onclick="clearCart()">Reset Cart</button>
       <button class="btn" onclick="showSection('labor')">Next: Labor</button>
     </div>
+    
     <div id="notification"></div>
-    <div id="cart" style="display:none;">
+    
+    <div id="cart" style="display:none; margin-top: 2rem;">
       <h3>Cart</h3>
       <table id="cartTable">
-        <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
-      <h3 id="grandTotal">Grand Total: $0.00</h3>
+      <div class="summary-total" id="grandTotal">Grand Total: $0.00</div>
     </div>
   </div>
 
   <!-- LABOR SECTION -->
   <div id="labor" class="section">
-    <h2>Labor</h2>
-    <div class="input-row">
-      <label>Start Time: <input type="time" id="timeIn" /></label>
-      <label>End Time: <input type="time" id="timeOut" /></label>
+    <div class="section-header">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+        <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+      </svg>
+      <h2>Labor</h2>
     </div>
+    
     <div class="input-row">
-      <label>30 Min Rate: <input type="number" id="rate30" value="87" /></label>
-      <label>1 Hr Rate: <input type="number" id="rate60" value="160" /></label>
-      <label>15 Min Rate: <input type="number" id="rate15" value="40" /></label>
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>Start Time</label>
+        <input type="time" id="timeIn" oninput="calculateLabor()" />
+      </div>
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>End Time</label>
+        <input type="time" id="timeOut" oninput="calculateLabor()" />
+      </div>
     </div>
+    
+    <div class="input-row">
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>30 Min Rate</label>
+        <input type="number" id="rate30" value="87" min="0" step="0.01" oninput="calculateLabor()" />
+      </div>
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>1 Hr Rate</label>
+        <input type="number" id="rate60" value="160" min="0" step="0.01" oninput="calculateLabor()" />
+      </div>
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>15 Min Rate</label>
+        <input type="number" id="rate15" value="40" min="0" step="0.01" oninput="calculateLabor()" />
+      </div>
+    </div>
+    
     <div class="cart-controls">
-      <button class="btn" onclick="calculateLabor()">Calculate Labor</button>
       <button class="btn" onclick="showSection('summary')">Next: Summary</button>
     </div>
-    <h3 id="laborTime">Time on Site: 0 hrs</h3>
-    <h3 id="laborTotal">Labor Charge: $0.00</h3>
+    
+    <div class="highlight">
+      <h3 id="laborTime">Time on Site: 0 hrs</h3>
+      <h3 id="laborTotal">Labor Charge: $0.00</h3>
+    </div>
   </div>
 
   <!-- SUMMARY SECTION -->
   <div id="summary" class="section">
-    <h2>Job Summary</h2>
-    <h3 id="summaryMaterial"></h3>
-    <h3 id="summaryLabor"></h3>
-    <h3 id="summaryTotal"></h3>
-    <h3 id="summaryCard"></h3>
+    <div class="section-header">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>
+      </svg>
+      <h2>Job Summary</h2>
+    </div>
+    
+    <div class="print-only">
+      <h3 id="printJobTitle"></h3>
+      <h4 id="printCustomerInfo"></h4>
+      <p id="printDate"></p>
+    </div>
+    
+    <div class="input-row">
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>Material Discount ($)</label>
+        <input type="number" id="discount" value="0" min="0" step="0.01" oninput="updateSummary()" />
+      </div>
+      <div class="input-group" style="flex: 1 1 200px;">
+        <label>Tax Rate (%)</label>
+        <input type="number" id="taxRate" value="0" min="0" step="0.01" oninput="updateSummary()" />
+      </div>
+    </div>
+    
+    <div class="summary-card">
+      <h3 id="summaryMaterial">Materials: $0.00</h3>
+      <h3 id="summaryDiscount">Discount: -$0.00</h3>
+      <h3 id="summaryTax">Tax: $0.00</h3>
+      <h3 id="summaryLabor">Labor: $0.00</h3>
+      <div class="summary-total" id="summaryTotal">Total (Cash): $0.00</div>
+      <h3 id="summaryCard">Total (Card w/ 3% fee): $0.00</h3>
+    </div>
+    
+    <div class="notes-section">
+      <label for="jobNotes">Job Notes:</label>
+      <textarea id="jobNotes" placeholder="Add any notes about the job here..."></textarea>
+    </div>
+    
+    <div class="cart-controls no-print">
+      <button class="btn" onclick="showSection('materials')">Back to Materials</button>
+      <button class="btn btn-warning" onclick="resetJob()">Reset Job</button>
+      <button class="btn" onclick="printPage()">Print Estimate</button>
+      <button class="btn btn-success" onclick="saveJob()">Save Job</button>
+    </div>
   </div>
 
   <script>
     const categories = {
-      toilet: {"Pro 45 Fill Valve": 22,"2\" Universal Flapper": 20,"12\" Supply Hose": 11,"16\" Supply Hose": 12,"Wax Ring": 9,"Kohler Flush Seal": 18,"Trip Lever": 25},
-      cpvc: {"10 Ft 3/4 CPVC": 25,"3/4 CPVC Ball Valve": 0,"3/4 CPVC 90": 2,"3/4 CPVC 90 ST": 2.5,"3/4 CPVC Coupling": 2,"3/4 CPVC 45": 2.5,"3/4 CPVC T": 5},
-      valves: {"Angle Stop": 20,"1/4 Turn 1/2\" Boiler Drain": 25,"3/4 Sharkbite Coupling": 13}
+      toilet: {
+        "Pro 45 Fill Valve": 22,
+        "2\" Universal Flapper": 20,
+        "12\" Supply Hose": 11,
+        "16\" Supply Hose": 12,
+        "Wax Ring": 9,
+        "Kohler Flush Seal": 18,
+        "Trip Lever": 25
+      },
+      cpvc_1_2: {
+        "10 Ft 1/2\" CPVC": 12,
+        "1/2\" CPVC Ball Valve": 8,
+        "1/2\" CPVC 90": 1.5,
+        "1/2\" CPVC 90 ST": 2,
+        "1/2\" CPVC Coupling": 1.2,
+        "1/2\" CPVC 45": 1.8,
+        "1/2\" CPVC T": 2.5
+      },
+      cpvc_3_4: {
+        "10 Ft 3/4\" CPVC": 18,
+        "3/4\" CPVC Ball Valve": 12,
+        "3/4\" CPVC 90": 2,
+        "3/4\" CPVC 90 ST": 2.5,
+        "3/4\" CPVC Coupling": 2,
+        "3/4\" CPVC 45": 2.5,
+        "3/4\" CPVC T": 5
+      },
+      valves: {
+        "Angle Stop": 20,
+        "1/4 Turn 1/2\" Boiler Drain": 25,
+        "3/4 Sharkbite Coupling": 13
+      },
+      dwv: {
+        "1 1/2\" DWV 1/8 Bend": 4.5,
+        "1 1/2\" DWV 1/4 Bend": 5,
+        "1 1/2\" DWV 45": 4,
+        "2\" DWV 1/8 Bend": 6,
+        "2\" DWV 1/4 Bend": 6.5,
+        "2\" DWV 45": 5.5,
+        "DWV Cleanout Plug": 3.5
+      }
     };
+    
     let currentCategory = null;
     const cart = [];
     let laborCharge = 0;
@@ -169,21 +641,58 @@
     function showSection(id) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+      
+      if (id === 'summary') {
+        calculateLabor();
+        updateSummary();
+      }
     }
 
     function showCategory(cat) {
+      if (cat === 'cpvc') {
+        document.getElementById('cpvcSubcategories').style.display = 'block';
+        document.getElementById('itemList').innerHTML = '';
+        return;
+      }
+      
+      document.getElementById('cpvcSubcategories').style.display = 'none';
       currentCategory = cat;
       renderItemList();
       document.getElementById('cart').style.display = 'none';
     }
 
+    function showCPVCCategory(cat) {
+      currentCategory = cat;
+      renderItemList();
+      document.getElementById('cart').style.display = 'none';
+      document.getElementById('cpvcSubcategories').style.display = 'block';
+    }
+
     function renderItemList() {
       const list = document.getElementById('itemList');
       list.innerHTML = '';
+      
+      if (!currentCategory) return;
+      
+      let categoryName = currentCategory.replace('_', ' ').toUpperCase();
+      if (categoryName === 'CPVC 1 2') categoryName = '1/2" CPVC';
+      if (categoryName === 'CPVC 3 4') categoryName = '3/4" CPVC';
+      
+      const header = document.createElement('h3');
+      header.className = 'category-header';
+      header.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+      </svg> ${categoryName}`;
+      list.appendChild(header);
+      
       for (let item in categories[currentCategory]) {
         const div = document.createElement('div');
         div.className = 'item';
-        div.textContent = `${item} - $${categories[currentCategory][item]}`;
+        div.innerHTML = `
+          <div class="item-name">${item}</div>
+          <div class="item-price">$${categories[currentCategory][item].toFixed(2)}</div>
+        `;
         div.onclick = () => addToCart(item, categories[currentCategory][item]);
         list.appendChild(div);
       }
@@ -192,84 +701,170 @@
     function addNewItem() {
       const name = document.getElementById('newItemName').value.trim();
       const price = parseFloat(document.getElementById('newItemPrice').value);
+      
       if (!name || isNaN(price) || price < 0 || !currentCategory) {
-        showMessage('Enter valid item, price, and category.', true);
+        showMessage('Please enter a valid item name and price.', true);
         return;
       }
+      
       categories[currentCategory][name] = price;
       renderItemList();
       document.getElementById('newItemName').value = '';
       document.getElementById('newItemPrice').value = '';
-      showMessage(`${name} added.`);
+      showMessage(`"${name}" added to ${currentCategory.replace('_', ' ')} category.`);
+      saveData();
     }
 
     function addToCart(itemName, unitPrice) {
-      const qty = parseInt(document.getElementById('quantityInput').value) || 1;
+      const qty = 1;
       const existing = cart.find(i => i.itemName === itemName);
+      
       if (existing) {
         existing.qty += qty;
         existing.totalPrice = existing.qty * existing.unitPrice;
       } else {
-        cart.push({ itemName, qty, unitPrice, totalPrice: qty * unitPrice });
+        cart.push({ 
+          itemName, 
+          qty, 
+          unitPrice, 
+          totalPrice: qty * unitPrice 
+        });
       }
-      showMessage(`${itemName} x${qty} added to cart.`);
+      
+      showMessage(`${itemName} added to cart.`);
       renderCart();
+      saveData();
     }
 
     function renderCart() {
       const tbody = document.querySelector('#cartTable tbody');
       tbody.innerHTML = '';
+      
+      if (cart.length === 0) {
+        document.getElementById('cart').style.display = 'none';
+        return;
+      }
+      
       let grandTotal = 0;
+      
       cart.forEach((row, index) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.itemName}</td>
+        tr.innerHTML = `
+          <td>${row.itemName}</td>
           <td><input type="number" class="edit-qty" value="${row.qty}" min="1" onchange="updateQty(${index}, this.value)" /></td>
           <td>$${row.unitPrice.toFixed(2)}</td>
-          <td>$${(row.totalPrice).toFixed(2)}</td>`;
+          <td>$${row.totalPrice.toFixed(2)}</td>
+          <td><button class="btn btn-danger" onclick="removeItem(${index})">&times;</button></td>
+        `;
         tbody.appendChild(tr);
         grandTotal += row.totalPrice;
       });
+      
       document.getElementById('grandTotal').textContent = `Grand Total: $${grandTotal.toFixed(2)}`;
       document.getElementById('cart').style.display = 'block';
     }
 
     function updateQty(index, newQty) {
-      cart[index].qty = parseInt(newQty);
-      cart[index].totalPrice = cart[index].qty * cart[index].unitPrice;
+      const qty = parseInt(newQty);
+      
+      if (isNaN(qty) || qty < 1) {
+        showMessage('Quantity must be at least 1.', true);
+        renderCart();
+        return;
+      }
+      
+      cart[index].qty = qty;
+      cart[index].totalPrice = qty * cart[index].unitPrice;
       renderCart();
+      saveData();
+    }
+
+    function removeItem(index) {
+      const itemName = cart[index].itemName;
+      cart.splice(index, 1);
+      renderCart();
+      showMessage(`"${itemName}" removed from cart.`);
+      saveData();
     }
 
     function clearCart() {
-      cart.length = 0;
-      renderCart();
+      if (cart.length === 0) return;
+      
+      if (confirm('Are you sure you want to clear all items from your cart?')) {
+        cart.length = 0;
+        renderCart();
+        showMessage('Cart has been cleared.');
+        saveData();
+      }
     }
 
     function showMessage(msg, isError = false) {
       const el = document.getElementById('notification');
       el.textContent = msg;
-      el.style.color = isError ? 'red' : 'green';
+      el.style.color = isError ? '#721c24' : '#155724';
+      el.style.backgroundColor = isError ? '#f8d7da' : '#d4edda';
       el.style.display = 'block';
-      setTimeout(() => el.style.display = 'none', 2000);
+      
+      setTimeout(() => {
+        el.style.display = 'none';
+      }, 3000);
     }
 
     function calculateLabor() {
       const timeIn = document.getElementById('timeIn').value;
       const timeOut = document.getElementById('timeOut').value;
-      const rate30 = parseFloat(document.getElementById('rate30').value);
-      const rate60 = parseFloat(document.getElementById('rate60').value);
-      const rate15 = parseFloat(document.getElementById('rate15').value);
-      if (!timeIn || !timeOut) return;
-      const [h1, m1] = timeIn.split(":"), [h2, m2] = timeOut.split(":");
-      let diff = (h2 * 60 + +m2) - (h1 * 60 + +m1);
-      let hours = Math.round((diff / 15)) / 4;
+      const rate30 = parseFloat(document.getElementById('rate30').value) || 87;
+      const rate60 = parseFloat(document.getElementById('rate60').value) || 160;
+      const rate15 = parseFloat(document.getElementById('rate15').value) || 40;
+      
+      if (!timeIn || !timeOut) {
+        document.getElementById('laborTime').textContent = 'Time on Site: Enter both times';
+        document.getElementById('laborTotal').textContent = 'Labor Charge: $0.00';
+        return;
+      }
+      
+      const [h1, m1] = timeIn.split(":").map(Number);
+      const [h2, m2] = timeOut.split(":").map(Number);
+      
+      let startMinutes = h1 * 60 + m1;
+      let endMinutes = h2 * 60 + m2;
+      
+      // Handle case where job crosses midnight
+      if (endMinutes < startMinutes) {
+        endMinutes += 24 * 60; // Add a day's worth of minutes
+      }
+      
+      let totalMinutes = endMinutes - startMinutes;
+      
+      if (totalMinutes <= 0) {
+        showMessage('End time must be after start time.', true);
+        return;
+      }
+      
+      let hours = totalMinutes / 60;
       let charge = 0;
-      if (hours <= 0.5) charge = rate30;
-      else if (hours <= 0.75) charge = rate30 + rate15;
-      else if (hours <= 1) charge = rate60;
-      else charge = rate60 + Math.floor(hours - 1) * rate60 + (hours % 1) * 4 * rate15;
+      
+      // Calculate labor charge based on time blocks
+      if (totalMinutes <= 30) {
+        charge = rate30;
+      } else if (totalMinutes <= 45) {
+        charge = rate30 + rate15;
+      } else if (totalMinutes <= 60) {
+        charge = rate60;
+      } else {
+        // First hour is rate60
+        charge = rate60;
+        
+        // Calculate additional time in 15-minute increments
+        const additionalMinutes = totalMinutes - 60;
+        const quarterHours = Math.ceil(additionalMinutes / 15);
+        charge += quarterHours * rate15;
+      }
+      
       laborCharge = charge;
-      document.getElementById('laborTime').textContent = `Time on Site: ${hours} hrs`;
+      document.getElementById('laborTime').textContent = `Time on Site: ${hours.toFixed(2)} hrs`;
       document.getElementById('laborTotal').textContent = `Labor Charge: $${charge.toFixed(2)}`;
+      saveData();
     }
 
     function getGrandTotal() {
@@ -278,19 +873,139 @@
 
     function updateSummary() {
       const matTotal = getGrandTotal();
+      const discount = parseFloat(document.getElementById('discount').value) || 0;
+      const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+      
+      const matAfterDiscount = Math.max(0, matTotal - discount);
+      const taxAmount = matAfterDiscount * (taxRate / 100);
       const labor = laborCharge;
-      const total = matTotal + labor;
-      const card = total * 1.03;
+      
+      const subtotal = matAfterDiscount + taxAmount;
+      const total = subtotal + labor;
+      const card = total * 1.03; // 3% card fee
+      
       document.getElementById('summaryMaterial').textContent = `Materials: $${matTotal.toFixed(2)}`;
+      document.getElementById('summaryDiscount').textContent = `Discount: -$${discount.toFixed(2)}`;
+      document.getElementById('summaryTax').textContent = `Tax (${taxRate}%): $${taxAmount.toFixed(2)}`;
       document.getElementById('summaryLabor').textContent = `Labor: $${labor.toFixed(2)}`;
       document.getElementById('summaryTotal').textContent = `Total (Cash): $${total.toFixed(2)}`;
       document.getElementById('summaryCard').textContent = `Total (Card w/ 3% fee): $${card.toFixed(2)}`;
     }
 
-    document.querySelector('button[onclick="showSection(\'summary\')"]').addEventListener('click', () => {
+    function saveJob() {
+      saveData();
+      showMessage('Job details saved successfully!');
+    }
+
+    function resetJob() {
+      if (confirm('Are you sure you want to reset the entire job? This will clear all data.')) {
+        cart.length = 0;
+        laborCharge = 0;
+        
+        document.getElementById('jobTitle').value = '';
+        document.getElementById('customerInfo').value = '';
+        document.getElementById('timeIn').value = '';
+        document.getElementById('timeOut').value = '';
+        document.getElementById('discount').value = '0';
+        document.getElementById('taxRate').value = '0';
+        document.getElementById('jobNotes').value = '';
+        
+        renderCart();
+        calculateLabor();
+        updateSummary();
+        showMessage('Job has been reset.');
+        saveData();
+      }
+    }
+
+    function printPage() {
+      // Update print-specific fields
+      document.getElementById('printJobTitle').textContent = 
+        document.getElementById('jobTitle').value || 'Plumbing Job Estimate';
+      document.getElementById('printCustomerInfo').textContent = 
+        document.getElementById('customerInfo').value || 'No customer information provided';
+      
+      const now = new Date();
+      document.getElementById('printDate').textContent = 
+        `Estimate Date: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+      
+      // Calculate and update summary
       calculateLabor();
       updateSummary();
-    });
+      
+      // Print after a short delay
+      setTimeout(() => {
+        window.print();
+      }, 500);
+    }
+
+    // localStorage save/load
+    function saveData() {
+      localStorage.setItem('jobCart', JSON.stringify(cart));
+      localStorage.setItem('laborCharge', laborCharge);
+      localStorage.setItem('categories', JSON.stringify(categories));
+      localStorage.setItem('jobTitle', document.getElementById('jobTitle').value);
+      localStorage.setItem('customerInfo', document.getElementById('customerInfo').value);
+      localStorage.setItem('discount', document.getElementById('discount').value);
+      localStorage.setItem('taxRate', document.getElementById('taxRate').value);
+      localStorage.setItem('jobNotes', document.getElementById('jobNotes').value);
+    }
+
+    function loadData() {
+      const savedCart = JSON.parse(localStorage.getItem('jobCart'));
+      if (savedCart && Array.isArray(savedCart)) {
+        cart.length = 0;
+        savedCart.forEach(item => cart.push(item));
+      }
+      
+      const savedLabor = parseFloat(localStorage.getItem('laborCharge'));
+      if (!isNaN(savedLabor)) {
+        laborCharge = savedLabor;
+        document.getElementById('laborTotal').textContent = `Labor Charge: $${laborCharge.toFixed(2)}`;
+      }
+      
+      const savedCategories = JSON.parse(localStorage.getItem('categories'));
+      if (savedCategories) {
+        for (let cat in savedCategories) {
+          if (categories[cat]) {
+            for (let item in savedCategories[cat]) {
+              categories[cat][item] = savedCategories[cat][item];
+            }
+          } else {
+            categories[cat] = savedCategories[cat];
+          }
+        }
+      }
+      
+      // Load form fields
+      document.getElementById('jobTitle').value = localStorage.getItem('jobTitle') || '';
+      document.getElementById('customerInfo').value = localStorage.getItem('customerInfo') || '';
+      document.getElementById('discount').value = localStorage.getItem('discount') || '0';
+      document.getElementById('taxRate').value = localStorage.getItem('taxRate') || '0';
+      document.getElementById('jobNotes').value = localStorage.getItem('jobNotes') || '';
+    }
+
+    // Initialize the app
+    window.onload = () => {
+      showCategory('toilet');
+      loadData();
+      renderCart();
+      
+      // Set current time as default for labor calculation
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('timeIn').value = `${hours}:${minutes}`;
+      
+      // Add 1 hour as default end time
+      const endTime = new Date(now.getTime() + 60 * 60 * 1000);
+      const endHours = endTime.getHours().toString().padStart(2, '0');
+      const endMinutes = endTime.getMinutes().toString().padStart(2, '0');
+      document.getElementById('timeOut').value = `${endHours}:${endMinutes}`;
+      
+      // Calculate labor with default times
+      calculateLabor();
+    };
   </script>
 </body>
 </html>
