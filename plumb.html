@@ -4,43 +4,87 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Job Calculator</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/679/679922.png" type="image/png">
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 1rem;
-      background: #f4f4f4;
+      background: #f2f2f7;
       max-width: 900px;
       margin: auto;
+      color: #333;
     }
     h1, h2, h3 {
       text-align: center;
+      color: #222;
     }
     .btn {
       padding: 0.5rem 1rem;
-      background: #007bff;
+      background: #28a745;
       color: #fff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      transition: background 0.2s;
     }
     .btn:hover {
-      background: #0056b3;
+      background: #218838;
     }
     .section { display: none; margin-top: 2rem; }
     .active { display: block; }
-    .item { padding: 0.5rem; background: #fff; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; margin: 0.25rem; }
-    .category-buttons, .item-list, .cart-controls, .nav-buttons {
-      display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin: 1rem 0;
+    .item {
+      padding: 0.5rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0.25rem;
+      flex: 1 1 45%;
+      text-align: center;
     }
-    #notification { text-align: center; color: green; margin-top: 0.5rem; display: none; }
-    input[type="time"], input[type="number"] { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { border: 1px solid #ccc; padding: 0.5rem; }
-    .input-row { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .category-buttons, .item-list, .cart-controls, .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    #notification {
+      text-align: center;
+      color: green;
+      margin-top: 0.5rem;
+      display: none;
+    }
+    input[type="time"], input[type="number"], input[type="text"] {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    .input-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .edit-qty {
+      width: 50px;
+    }
   </style>
 </head>
 <body>
-  <h1>Job Cost Calculator</h1>
+  <h1>🪠 Job Cost Calculator</h1>
   <div class="nav-buttons">
     <button class="btn" onclick="showSection('materials')">Materials</button>
     <button class="btn" onclick="showSection('labor')">Labor</button>
@@ -56,11 +100,14 @@
       <button class="btn" onclick="showCategory('valves')">Valves</button>
     </div>
     <div id="itemList" class="item-list"></div>
-    <div class="input-row">
-      <input type="text" id="newItemName" placeholder="New Item Name" />
-      <input type="number" id="newItemPrice" placeholder="Price" min="0" step="0.01" />
-      <button class="btn" onclick="addNewItem()">Add to Category</button>
-    </div>
+    <details>
+      <summary class="btn">➕ Add New Item</summary>
+      <div class="input-row">
+        <input type="text" id="newItemName" placeholder="New Item Name" />
+        <input type="number" id="newItemPrice" placeholder="Price" min="0" step="0.01" />
+        <button class="btn" onclick="addNewItem()">Add to Category</button>
+      </div>
+    </details>
     <div class="input-row">
       <input type="number" id="quantityInput" placeholder="Qty" min="1" value="1" />
     </div>
@@ -72,7 +119,10 @@
     <div id="notification"></div>
     <div id="cart" style="display:none;">
       <h3>Cart</h3>
-      <table id="cartTable"><thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody></tbody></table>
+      <table id="cartTable">
+        <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+        <tbody></tbody>
+      </table>
       <h3 id="grandTotal">Grand Total: $0.00</h3>
     </div>
   </div>
@@ -155,23 +205,38 @@
 
     function addToCart(itemName, unitPrice) {
       const qty = parseInt(document.getElementById('quantityInput').value) || 1;
-      const totalPrice = qty * unitPrice;
-      cart.push({ itemName, qty, unitPrice, totalPrice });
+      const existing = cart.find(i => i.itemName === itemName);
+      if (existing) {
+        existing.qty += qty;
+        existing.totalPrice = existing.qty * existing.unitPrice;
+      } else {
+        cart.push({ itemName, qty, unitPrice, totalPrice: qty * unitPrice });
+      }
       showMessage(`${itemName} x${qty} added to cart.`);
+      renderCart();
     }
 
     function renderCart() {
       const tbody = document.querySelector('#cartTable tbody');
       tbody.innerHTML = '';
       let grandTotal = 0;
-      cart.forEach(row => {
+      cart.forEach((row, index) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.itemName}</td><td>${row.qty}</td><td>$${row.unitPrice.toFixed(2)}</td><td>$${row.totalPrice.toFixed(2)}</td>`;
+        tr.innerHTML = `<td>${row.itemName}</td>
+          <td><input type="number" class="edit-qty" value="${row.qty}" min="1" onchange="updateQty(${index}, this.value)" /></td>
+          <td>$${row.unitPrice.toFixed(2)}</td>
+          <td>$${(row.totalPrice).toFixed(2)}</td>`;
         tbody.appendChild(tr);
         grandTotal += row.totalPrice;
       });
       document.getElementById('grandTotal').textContent = `Grand Total: $${grandTotal.toFixed(2)}`;
       document.getElementById('cart').style.display = 'block';
+    }
+
+    function updateQty(index, newQty) {
+      cart[index].qty = parseInt(newQty);
+      cart[index].totalPrice = cart[index].qty * cart[index].unitPrice;
+      renderCart();
     }
 
     function clearCart() {
@@ -184,7 +249,7 @@
       el.textContent = msg;
       el.style.color = isError ? 'red' : 'green';
       el.style.display = 'block';
-      setTimeout(() => el.style.display = 'none', 2500);
+      setTimeout(() => el.style.display = 'none', 2000);
     }
 
     function calculateLabor() {
@@ -193,19 +258,15 @@
       const rate30 = parseFloat(document.getElementById('rate30').value);
       const rate60 = parseFloat(document.getElementById('rate60').value);
       const rate15 = parseFloat(document.getElementById('rate15').value);
-
       if (!timeIn || !timeOut) return;
-      const [h1, m1] = timeIn.split(":").map(Number);
-      const [h2, m2] = timeOut.split(":").map(Number);
-      let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+      const [h1, m1] = timeIn.split(":"), [h2, m2] = timeOut.split(":");
+      let diff = (h2 * 60 + +m2) - (h1 * 60 + +m1);
       let hours = Math.round((diff / 15)) / 4;
-
       let charge = 0;
       if (hours <= 0.5) charge = rate30;
       else if (hours <= 0.75) charge = rate30 + rate15;
       else if (hours <= 1) charge = rate60;
       else charge = rate60 + Math.floor(hours - 1) * rate60 + (hours % 1) * 4 * rate15;
-
       laborCharge = charge;
       document.getElementById('laborTime').textContent = `Time on Site: ${hours} hrs`;
       document.getElementById('laborTotal').textContent = `Labor Charge: $${charge.toFixed(2)}`;
@@ -226,7 +287,10 @@
       document.getElementById('summaryCard').textContent = `Total (Card w/ 3% fee): $${card.toFixed(2)}`;
     }
 
-    document.querySelector('button[onclick="showSection(\'summary\')"]').addEventListener('click', updateSummary);
+    document.querySelector('button[onclick="showSection(\'summary\')"]').addEventListener('click', () => {
+      calculateLabor();
+      updateSummary();
+    });
   </script>
 </body>
 </html>
