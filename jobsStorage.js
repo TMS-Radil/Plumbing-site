@@ -5,16 +5,36 @@ function saveJobData(jobData) {
   localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
 }
 
-// Get all saved jobs from localStorage
+// Get saved jobs from localStorage
 function getSavedJobs() {
   return JSON.parse(localStorage.getItem('savedJobs')) || [];
 }
 
-// Display saved jobs inside a container element by ID
+// Delete a job by index
+function deleteJob(index) {
+  const savedJobs = getSavedJobs();
+  savedJobs.splice(index, 1);
+  localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+  displaySavedJobs('savedJobsContainer'); // Refresh display
+}
+
+// Display jobs in a container
+let isJobsVisible = false;
+
 function displaySavedJobs(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return alert("Missing container: " + containerId);
+
+  if (isJobsVisible) {
+    container.innerHTML = ""; // Hide the jobs
+    isJobsVisible = false;
+    return;
+  }
+
   const savedJobs = getSavedJobs();
   if (savedJobs.length === 0) {
-    alert("No saved jobs yet.");
+    container.innerHTML = "<p>No saved jobs.</p>";
+    isJobsVisible = true;
     return;
   }
 
@@ -26,38 +46,13 @@ function displaySavedJobs(containerId) {
       Title: ${job.jobTitle}<br>
       Customer: ${job.customerInfo}<br>
       Total: $${job.total.toFixed(2)}<br>
-      Saved at: ${new Date(job.savedAt).toLocaleString()}<br>
+      Saved: ${new Date(job.savedAt).toLocaleString()}<br>
       Notes: ${job.jobNotes}<br>
-      Items: ${job.items.map(i => `${i.item} x${i.quantity}`).join(', ')}
+      Items: ${job.items.map(i => `${i.item} x${i.quantity}`).join(', ')}<br>
+      <button onclick="deleteJob(${index})">Delete</button>
     </div>`;
   });
 
-  const container = document.getElementById(containerId);
-  if (container) {
-    container.innerHTML = output;
-  } else {
-    alert("Container not found: " + containerId);
-  }
-}
-
-function saveJob() {
-  const jobData = {
-    jobTitle: document.getElementById('jobTitle').value,
-    customerInfo: document.getElementById('customerInfo').value,
-    items: cart, // assuming this is your global cart array
-    laborCharge,
-    discount: parseFloat(document.getElementById('discount').value) || 0,
-    taxRate: parseFloat(document.getElementById('taxRate').value) || 0,
-    total: parseFloat(document.getElementById('summaryTotal').textContent.replace(/[^\d.]/g, '')) || 0,
-    jobNotes: document.getElementById('jobNotes').value,
-    savedAt: new Date().toISOString()
-  };
-
-  saveJobData(jobData); // <-- Call function from jobsStorage.js
-
-  showMessage("Job saved locally!");
-}
-
-function viewSavedJobs() {
-  displaySavedJobs('savedJobsContainer'); // Pass the ID of the container to render jobs
+  container.innerHTML = output;
+  isJobsVisible = true;
 }
