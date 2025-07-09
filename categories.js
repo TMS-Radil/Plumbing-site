@@ -40,5 +40,8 @@ const categories = {
     "2\" DWV 1/4 Bend": 6.5,
     "2\" DWV 45": 5.5,
     "DWV Cleanout Plug": 3.5
+  },
+  dwv: {
+    "1\" PVC Coupling": 6,
   }
 };
