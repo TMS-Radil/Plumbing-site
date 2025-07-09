@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <div id="savedJobsContainer" style="margin-top: 20px;"></div>
   <script src="categories.js" defer></script>
   <script src="jobsStorage.js"></script>
 
@@ -592,9 +593,7 @@
     </div>
   </div>
   
-<button onclick="displaySavedJobs('savedJobsContainer')">View Saved Jobs</button>
-<div id="savedJobsContainer" style="margin-top: 20px;"></div>
-
+<button onclick="toggleSavedJobs()">View Saved Jobs</button>
 
   <script>
     let currentCategory = null;
