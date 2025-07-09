@@ -1,3 +1,20 @@
+function saveJob() {
+  const jobData = {
+    jobTitle: document.getElementById('jobTitle').value,
+    customerInfo: document.getElementById('customerInfo').value,
+    items: cart,
+    laborCharge,
+    discount: parseFloat(document.getElementById('discount').value) || 0,
+    taxRate: parseFloat(document.getElementById('taxRate').value) || 0,
+    total: parseFloat(document.getElementById('summaryTotal').textContent.replace(/[^\d.]/g, '')) || 0,
+    jobNotes: document.getElementById('jobNotes').value,
+    savedAt: new Date().toISOString()
+  };
+
+  saveJobData(jobData);
+  showMessage("Job saved locally!");
+}
+
 // Save job data to localStorage
 function saveJobData(jobData) {
   const savedJobs = JSON.parse(localStorage.getItem('savedJobs')) || [];
