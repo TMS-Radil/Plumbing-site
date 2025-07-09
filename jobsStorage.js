@@ -29,27 +29,27 @@ function toggleSavedJobs() {
 }
 
 function displaySavedJobs(container) {
-  const savedJobs = JSON.parse(localStorage.getItem('savedJobs')) || [];
+  container.innerHTML = '';
+  const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
 
   if (savedJobs.length === 0) {
-    container.innerHTML = "<p>No saved jobs.</p>";
+    container.innerHTML = '<p>No saved jobs found.</p>';
     return;
   }
 
-  container.innerHTML = "<h3>Saved Jobs:</h3>";
   savedJobs.forEach((job, index) => {
-    const div = document.createElement('div');
-    div.classList.add('saved-job');
-    div.innerHTML = `
-      <strong>${job.jobTitle}</strong><br>
-      Customer: ${job.customerInfo}<br>
-      Items: ${job.items.length}<br>
-      Total: $${job.total.toFixed(2)}<br>
-      Notes: ${job.jobNotes}<br>
+    const jobDiv = document.createElement('div');
+    jobDiv.className = 'saved-job';
+    jobDiv.innerHTML = `
+      <h4>${job.jobTitle}</h4>
+      <p><strong>Customer:</strong> ${job.customerInfo}</p>
+      <p><strong>Labor:</strong> ${job.laborCharge} hours</p>
+      <p><strong>Total:</strong> $${job.total.toFixed(2)}</p>
+      <p><strong>Notes:</strong> ${job.jobNotes || "None"}</p>
       <button onclick="deleteJob(${index})">Delete</button>
       <hr>
     `;
-    container.appendChild(div);
+    container.appendChild(jobDiv);
   });
 }
 
