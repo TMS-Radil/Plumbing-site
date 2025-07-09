@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <script src="categories.js" defer></script>
+  <script src="jobsStorage.js"></script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -590,6 +591,10 @@
       <button class="btn btn-success" onclick="saveJob()">Save Job</button>
     </div>
   </div>
+  
+  <button onclick="viewSavedJobs()">View Saved Jobs</button>
+<div id="savedJobsContainer" style="margin-top:20px;"></div>
+
 
   <script>
     let currentCategory = null;
@@ -849,35 +854,6 @@
       document.getElementById('summaryTotal').textContent = `Total (Cash): $${total.toFixed(2)}`;
       document.getElementById('summaryCard').textContent = `Total (Card w/ 3% fee): $${card.toFixed(2)}`;
     }
-
-function saveJob() {
-  const jobData = {
-    jobTitle: document.getElementById('jobTitle').value,
-    customerInfo: document.getElementById('customerInfo').value,
-    items: cart,
-    laborCharge,
-    discount: parseFloat(document.getElementById('discount').value) || 0,
-    taxRate: parseFloat(document.getElementById('taxRate').value) || 0,
-    total: parseFloat(document.getElementById('summaryTotal').textContent.replace(/[^\d.]/g, '')) || 0,
-    jobNotes: document.getElementById('jobNotes').value
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbyXuQN4Vt2OWHUgHcxxwstJ5az3dR-kwCdvQ2qrrvsCPwyFmc9x7TK6t9Ma5qajM-haTA/exec", {
-    method: "POST",
-    body: JSON.stringify(jobData),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.text())
-  .then(res => {
-    showMessage("Job saved to Google Sheet!");
-  })
-  .catch(err => {
-    showMessage("Error saving job: " + err.message, true);
-  });
-}
-
 
     function resetJob() {
       if (confirm('Are you sure you want to reset the entire job? This will clear all data.')) {
