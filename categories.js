@@ -28,7 +28,7 @@ const categories = {
     "3/4\" CPVC T": 5
   },
   valves: {
-    "Angle Stop": 20,
+    "CPVC Angle Stop": 25,
     "1/4 Turn 1/2\" Boiler Drain": 25,
     "3/4 Sharkbite Coupling": 13
   },
