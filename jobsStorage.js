@@ -41,8 +41,8 @@ function displaySavedJobs(container) {
     const jobDiv = document.createElement('div');
     jobDiv.className = 'saved-job';
     jobDiv.innerHTML = `
-      <h4>${job.jobTitle}</h4>
-      <p><strong>Customer:</strong> ${job.customerInfo}</p>
+      <h4>${job.customerInfo}</h4>
+      <p><strong>Description:</strong> ${job.jobTitle}</p>
       <p><strong>Labor:</strong> ${job.laborCharge} hours</p>
       <p><strong>Total:</strong> $${job.total.toFixed(2)}</p>
       <p><strong>Notes:</strong> ${job.jobNotes || "None"}</p>
@@ -52,6 +52,7 @@ function displaySavedJobs(container) {
     container.appendChild(jobDiv);
   });
 }
+
 
 function deleteJob(index) {
   const savedJobs = JSON.parse(localStorage.getItem('savedJobs')) || [];
